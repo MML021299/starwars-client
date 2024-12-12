@@ -5,29 +5,34 @@ import axios from "axios";
 
 const getFilm = async (url) => {
   const res = await axios.get(url)
-  console.log('res')
-  console.log(res)
-  console.log('res')
   return res.data.title
+}
+
+const getHomeworld = async (url) => {
+  const res = await axios.get(url)
+  return res.data.name
 }
 
 const Modal = ({ card, onClose }) => {
   const [films, setFilms] = useState([]);
+  const [homeworld, setHomeworld] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFilmTitles = async () => {
+    const fetchCharData = async () => {
       try {
         const film = await Promise.all(card.films.map(getFilm));
+        const homeworld = await getHomeworld(card.homeworld);
         setFilms(film);
+        setHomeworld(homeworld)
         setLoading(false)
       } catch (error) {
         console.error("Error fetching film titles:", error);
       }
     };
 
-    fetchFilmTitles();
-  }, [card.films]);
+    fetchCharData();
+  }, [card.films, card.homeworld]);
 
   return (
     <div className="modal-overlay">
@@ -41,9 +46,10 @@ const Modal = ({ card, onClose }) => {
           <p><strong>Gender:</strong> {capitalizeFirstLetter(card.gender)}</p>
           <p><strong>Height:</strong> {capitalizeFirstLetter(card.height)}</p>
           <p><strong>Weight:</strong> {capitalizeFirstLetter(card.mass)} </p>
+          <p><strong>Homeworld:</strong> {loading ? "Loading data..." : capitalizeFirstLetter(homeworld)}</p>
           <p><strong>Films:</strong></p>
           {loading ? (
-            <p style={{paddingLeft: '20px'}}>Loading films...</p> // Loading text message
+            <p style={{paddingLeft: '20px'}}>Loading data...</p>
           ) : (
             films.length > 0 ? (
               <ul>

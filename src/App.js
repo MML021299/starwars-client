@@ -9,24 +9,59 @@ import "./App.css";
 const App = () => {
   const [cards, setCards] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
+  const [planets, setPlanets] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [gender, setGender] = useState("All");
+  const [homeworld, setHomeworld] = useState("All");
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const cardsPerPage = 10;
 
   const handleSearch = (query) => {
+    let filtered = cards
+    
     setSearchQuery(query);
-    setFilteredCards(
-      cards.filter((card) =>
+
+    if (query) {
+      filtered = filtered.filter((card) =>
         card.name.toLowerCase().includes(query.toLowerCase())
-      )
-    );
+      );
+    }
+
+    if (gender && gender !== "All") {
+      filtered = filtered.filter((card) => card.gender === gender);
+    }
+
+    if (homeworld && homeworld !== "All") {
+      filtered = filtered.filter((card) => card.homeworld === homeworld);
+    }
+
+    setFilteredCards(filtered)
     setCurrentPage(1);
   };
 
-  const handleFilter = () => {
-    setFilteredCards(filteredCards.reverse());
+  const handleFilter = ({ gender, homeworld, searchQuery }) => {
+    let filtered = cards;
+    setGender(gender)
+    setHomeworld(homeworld)
+
+    if (searchQuery) {
+      filtered = filtered.filter((card) =>
+        card.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (gender && gender !== "All") {
+      filtered = filtered.filter((card) => card.gender === gender);
+    }
+
+    if (homeworld && homeworld !== "All") {
+      filtered = filtered.filter((card) => card.homeworld === homeworld);
+    }
+  
+    setFilteredCards(filtered);
+    setCurrentPage(1);
   };
 
   const openCard = (card) => {
@@ -48,38 +83,60 @@ const App = () => {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(() => {
-    const fetchAllPeople = async () => {
-      let allPeople = []
-      let page = "https://swapi.dev/api/people/"
+  const fetchAllPeople = async () => {
+    setLoading(true)
+    let allPeople = []
+    let page = "https://swapi.dev/api/people/"
 
-      try {
-        while(page) {
-          const res = await axios.get(page)
-          allPeople = [...allPeople, ...res.data.results]
-          page = res.data.next
-        }
-      } catch (error) {
-        console.log(error)
+    try {
+      while(page) {
+        const res = await axios.get(page)
+        allPeople = [...allPeople, ...res.data.results]
+        page = res.data.next
       }
-
-      setFilteredCards(allPeople)
-      setCards(allPeople)
-      setLoading(false)
+    } catch (error) {
+      console.log(error)
     }
 
+    setFilteredCards(allPeople)
+    setCards(allPeople)
+    setLoading(false)
+  }
+
+  const fetchAllPlanets = async () => {
+    setLoading(true)
+    let allPlanets = []
+    let page = "https://swapi.dev/api/planets/"
+
+    try {
+      while(page) {
+        const res = await axios.get(page)
+        allPlanets = [...allPlanets, ...res.data.results]
+        page = res.data.next
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    
+    setPlanets(allPlanets)
+    setLoading(false)
+  }
+
+  useEffect(() => {
     fetchAllPeople()
+    fetchAllPlanets()
   }, [])
 
   return (
     <div className="App">
       <SearchFilter
         searchQuery={searchQuery}
+        planets={planets}
         onSearch={handleSearch}
         onFilter={handleFilter}
       />
       {loading ? (
-        <Loading /> // Display the loading animation
+        <Loading />
       ) : (
         <div className="card-grid">
           {currentCards.map((card) => (
