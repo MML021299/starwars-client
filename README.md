@@ -1,7 +1,7 @@
 ## Important
 
-Integrated API from https://swapi.dev/api/
-Check API url if working/accessible if API not working when running this application
+Integrated API from https://swapi.dev/api/ \
+Check API url if working/accessible if API not working when running this application\
 Run `npm install` before running the app to install all needed dependencies
 
 ## `npm start`
