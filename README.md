@@ -1,6 +1,6 @@
 ## Important
 
-Integrated API from https://swapi.dev/api/ \
+Integrated API from ~~https://swapi.dev/api/~~ https://swapi.py4e.com/ \
 If API not working when running this application, check API web page if its working/accessible\
 Run `npm install` before running the app to install all needed dependencies
 
