@@ -1,3 +1,7 @@
+## Live URL
+
+https://starwars-client-tau.vercel.app/
+
 ## Important
 
 Integrated API from ~~https://swapi.dev/api/~~ https://swapi.py4e.com/ \
