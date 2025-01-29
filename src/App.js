@@ -86,7 +86,7 @@ const App = () => {
   const fetchAllPeople = async () => {
     setLoading(true)
     let allPeople = []
-    let page = "https://swapi.py4e.com/api/people/"
+    let page = "https://swapi.dev/api/people/"
 
     try {
       while(page) {
@@ -106,7 +106,7 @@ const App = () => {
   const fetchAllPlanets = async () => {
     setLoading(true)
     let allPlanets = []
-    let page = "https://swapi.py4e.com/api/planets/"
+    let page = "https://swapi.dev/api/planets/"
 
     try {
       while(page) {
